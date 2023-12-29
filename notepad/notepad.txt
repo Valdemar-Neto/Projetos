@@ -1,0 +1,88 @@
+1) Usando o QtCreator, crie um novo projeto (notepad), tendo como classe base um QMainWindow:
+   Application > Qt Widgets Application
+   Class name: Notepad
+   Base class: QMainWindow
+
+2) Utilizando o designer do Qt Creator, acrescente à janela:
+- Um editor de textos (QTextEdit) em cima
+- Um botão (QPushButton) em baixo. Altere seu texto para "Quit" e seu nome (propriedade "objectName") para quitButton
+
+3) Alinhe os objetos verticalmente
+
+4) Conecte o sinal "clicked" do push button com um slot específico:
+- Clique com o botão da direita do mouse no push button
+- Selecione Go to slot > clicked()
+- Um slot privado, on_quitButton_clicked(), é adicionado aos arquivos .h e .cpp
+
+5) Acrescente a ação desejada (sair) na definição (.cpp) do slot:
+void Notepad::on_quitButton_clicked()
+{
+  QCoreApplication::quit();
+}
+
+6) Na barra de menus da QMainWindow, acrescente um menu "File" com as opções "Open" e "Save"
+- Digite as novas opções no texto "Type Here", seguidas de ENTER. As opções são acrescentadas ao menu.
+
+7) Construa e execute o aplicativo.
+
+8) Conecte o sinal "triggered" das novas ações criadas (Open e Save) com slots específicos:
+- Clique com o botão da direita do mouse no nome da ação
+- Selecione Go to slot > triggered()
+- Slots privados, on_actionOpen_triggered() e on_actionSave_triggered(), são adicionados aos arquivos .h e .cpp
+
+9) Dentro do slot on_actionOpen_triggered():
+a) use a função getOpenFileName da caixa de diálogo QFileDialog para retornar o nome de um arquivo que o usuário deseja abrir, ou uma QString vazia caso o usuário cancele. Os parâmetros dessa função são o widget pai, o texto da janela de diálogo, a pasta inicial e a lista de tipos de arquivos a serem lidos.
+b) se o arquivo puder ser aberto (file.open), use uma QTextStream (in) para receber o conteúdo do arquivo.
+c) transfira todo esse conteúdo da stream (readAll) para o editor de texto (setText).
+d) feche o arquivo ao final (close).
+
+void Notepad::on_actionOpen_triggered()
+{
+  QString fileName = QFileDialog::
+      getOpenFileName(this,
+                      "Open File",
+                      QString(),
+                      "Text Files (*.txt);;C++ Files (*.cpp *.h)");
+  
+  if (!fileName.isEmpty()) {
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+      // error message
+      QMessageBox::critical(this, tr("Error"), tr("Could not open file to read"));
+      return;
+    }
+    QTextStream in(&file);
+    ui->textEdit->setText(in.readAll());
+    file.close();
+  }
+}
+
+10) Dentro do slot on_actionSave_triggered():
+a) use a função getSaveFileName da caixa de diálogo QFileDialog para retornar o nome de um arquivo no qual o usuário deseja salvar, ou uma QString vazia caso o usuário cancele.
+b) Se o arquivo puder ser aberto (file.open), use uma QTextStream (stream(&file)) para receber o conteúdo do editor de texto (stream <<).
+c) transfira todo esse conteúdo da stream (flush) para o arquivo.
+d) feche o arquivo ao final (close).
+
+void Notepad::on_actionSave_triggered()
+{
+  QString fileName = QFileDialog::
+      getSaveFileName(this,
+                      "Save File",
+                      QString(),
+                      "Text Files (*.txt);;C++ Files (*.cpp *.h)");
+  
+  if (!fileName.isEmpty()) {
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+      // error message
+      QMessageBox::critical(this, tr("Error"), tr("Could not open file to save"));
+      return;
+    }
+    QTextStream stream(&file);
+    stream << ui->textEdit->toPlainText();
+    stream.flush();
+    file.close();
+  }
+}
+
+11) Construa e execute o aplicativo.

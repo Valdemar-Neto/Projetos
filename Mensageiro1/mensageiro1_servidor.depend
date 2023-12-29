@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1676493817 source:c:\users\sol\documents\projetos\mysocket\mysocket.cpp
+	<iostream>
+	<string.h>
+	"mysocket.h"
+	<sys/types.h>
+	<netdb.h>
+	<unistd.h>
+
+1676493817 c:\users\sol\documents\projetos\mysocket\mysocket.h
+	<iostream>
+	<string>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/socket.h>
+
+1677252086 source:c:\users\sol\documents\projetos\mensageiro1\mensageiro1_servidor.cpp
+	<iostream>
+	<string.h>
+	<list>
+	<algorithm>
+	<thread>
+	"../MySocket/mysocket.h"
+	"mensageiro.h"
+
+1677183999 c:\users\sol\documents\projetos\mensageiro1\mensageiro.h
+
